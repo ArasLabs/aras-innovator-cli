@@ -7,7 +7,7 @@ aras-innovator-cli is a sample visual studio project to demonstrate how you can 
 
 **Before trying to build this project you need to reference the right version of IOM (the Aras Innovator API).**
 
-
+![CLI interface](screenshots/innovatorCLI.PNG)
 
 ## Usage
 
