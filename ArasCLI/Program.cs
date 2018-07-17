@@ -18,6 +18,7 @@ namespace ArasCLI
             string password = "";
             string database = "";
             string url = "";
+            string configFile = "";
             string filepathin = "";
             string filepathout = "";
             string filepathlog = "";
@@ -25,12 +26,12 @@ namespace ArasCLI
             System.Console.WriteLine(@"
 
 
-                           _____                             _                _____ _      _____ 
-     /\                   |_   _|                           | |              / ____| |    |_   _|
-    /  \   _ __ __ _ ___    | |  _ __  _ __   _____   ____ _| |_ ___  _ __  | |    | |      | |  
-   / /\ \ | '__/ _` / __|   | | | '_ \| '_ \ / _ \ \ / / _` | __/ _ \| '__| | |    | |      | |  
-  / ____ \| | | (_| \__ \  _| |_| | | | | | | (_) \ V / (_| | || (_) | |    | |____| |____ _| |_ 
- /_/    \_\_|  \__,_|___/ |_____|_| |_|_| |_|\___/ \_/ \__,_|\__\___/|_|     \_____|______|_____|
+                               _____                             _                _____ _      _____ 
+        /\                   |_   _|                           | |              / ____| |    |_   _|
+       /  \   _ __ __ _ ___    | |  _ __  _ __   _____   ____ _| |_ ___  _ __  | |    | |      | |  
+      / /\ \ | '__/ _` / __|   | | | '_ \| '_ \ / _ \ \ / / _` | __/ _ \| '__| | |    | |      | |  
+     / ____ \| | | (_| \__ \  _| |_| | | | | | | (_) \ V / (_| | || (_) | |    | |____| |____ _| |_ 
+    /_/    \_\_|  \__,_|___/ |_____|_| |_|_| |_|\___/ \_/ \__,_|\__\___/|_|     \_____|______|_____|
                                                                                                  
                                                                                                  
     V0.1
@@ -87,6 +88,12 @@ namespace ArasCLI
     ==> OPTIONNAL
     -g  <filepath>      => Log output file
     -o  <filepath>      => Result output file
+    -c  <filepath>      => Instance Config File 
+                       template : 
+                            l:http://localhost/InnovatorServer
+                            d:InnovatorSolution
+                            u:admin
+                            p:innovator                             
 
                 ");
                 return;
@@ -99,6 +106,11 @@ namespace ArasCLI
                 
                 switch (args[i])
                 {
+                    case "-c":
+                    case "--config":
+                        configFile = args[i + 1];
+                        System.Console.WriteLine(" - Config Input = " + args[i + 1]);
+                        break;
                     case "-l":
                     case "--url":
                         url = args[i + 1];
@@ -139,6 +151,41 @@ namespace ArasCLI
             }
 
             System.Console.WriteLine("");
+            // test if config file is available and read the content
+            System.Console.WriteLine(configFile);
+
+            if (configFile != "")
+            {
+                string[] configContent;
+                try
+                {
+                    configContent = File.ReadAllLines(configFile);
+                    
+                    foreach (string line in configContent)
+                    {
+                        switch (line.Substring(0, 2))
+                        {
+                            case "l:":
+                                url = line.Substring(2);
+                                break;
+                            case "d:":
+                                database = line.Substring(2);
+                                break;
+                            case "u:":
+                                login = line.Substring(2);
+                                break;
+                            case "p:":
+                                password = line.Substring(2);
+                                break;
+                        }
+                    }
+                } catch (Exception ex)
+                {
+                    System.Console.WriteLine(ex);
+                    return;
+                }
+            }
+
 
             // test if mandatory arguments are provided
             if (login!="" && password!="" && database!="" && url != "")
@@ -225,6 +272,12 @@ namespace ArasCLI
                 conn.Logout();
                 System.Console.WriteLine(@"
 
+                ");
+            } else
+            {
+
+                System.Console.WriteLine(@"
+ No connection settings provided !
                 ");
             }
         }
