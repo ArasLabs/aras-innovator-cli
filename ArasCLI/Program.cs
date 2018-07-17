@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace ArasCLI
             string url = "";
             string filepathin = "";
             string filepathout = "";
+            string filepathlog = "";
 
             System.Console.WriteLine(@"
 
@@ -32,7 +33,7 @@ namespace ArasCLI
  /_/    \_\_|  \__,_|___/ |_____|_| |_|_| |_|\___/ \_/ \__,_|\__\___/|_|     \_____|______|_____|
                                                                                                  
                                                                                                  
- V0.1
+    V0.1
 
 ");
 
@@ -40,10 +41,8 @@ namespace ArasCLI
             if (args.Length == 0)
             {
                 // display available commands
-                System.Console.WriteLine("AML Loader");
-
                 System.Console.WriteLine(@"
- 
+    AML Loader
 
     =========== SHORT ===========
 
@@ -76,6 +75,18 @@ namespace ArasCLI
 
 
     =========== OPTIONS ===========
+
+
+    ==> MANDATORY 
+    -l  <url>           => Aras URL
+    -d  <dbname>        => Aras Database
+    -u  <user login>    => Aras User
+    -p  <password>      => Aras Password
+    -f  <filepath>      => Input AML File
+
+    ==> OPTIONNAL
+    -g  <filepath>      => Log output file
+    -o  <filepath>      => Result output file
 
                 ");
                 return;
@@ -120,7 +131,7 @@ namespace ArasCLI
                         break;
                     case "-g":
                     case "--log":
-                        filepathout = args[i + 1];
+                        filepathlog = args[i + 1];
                         System.Console.WriteLine(" - Output file = " + args[i + 1]);
                         break;
 
@@ -191,6 +202,19 @@ namespace ArasCLI
                     try
                     {
                         File.WriteAllText(filepathout, result.dom.OuterXml);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Console.WriteLine(ex);
+                        return;
+                    }
+                }
+
+                if (filepathlog != "")
+                {
+                    try
+                    {
+                        File.WriteAllText(filepathlog, result.dom.OuterXml);
                     }
                     catch (Exception ex)
                     {
