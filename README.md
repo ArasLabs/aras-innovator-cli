@@ -5,6 +5,8 @@ aras-innovator-cli is a sample visual studio project to demonstrate how you can 
 
 **Built Using:** Aras 11.0 SP12
 
+**Tested on** : 11SP12, 11SP15
+
 **Before trying to build this project you need to reference the right version of IOM (the Aras Innovator API).**
 
 ![CLI interface](screenshots/innovatorCLI.PNG)
@@ -28,6 +30,9 @@ The sample application allows to send the AML content of a file to Aras Innovato
 ```
 	-o	<filepath>		=> output filepath
 	-g 	<filepath>		=> output log filepath
+	-rec 			   => defines if file upload search for files recursively
+	-m <mode>			=> 'files' or 'aml' (default is 'aml')
+	-fop 				=> required in file mode to designate the file folder
 ```
 
 
